@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.section-title{
+    font-size:22px;
+    margin-bottom:8px;
+    color:#1e293b;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+input{
+    padding:10px;
+    border:1px solid #cbd5e1;
+    border-radius:10px;
+    width:260px;
+    font-size:14px;
+}
+
+.btn{
+    background:linear-gradient(45deg,#2563eb,#1d4ed8);
+    color:white;
+    text-decoration:none;
+    padding:10px 16px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.3s;
+    font-size:14px;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn-green{
+    background:linear-gradient(45deg,#16a34a,#15803d);
+}
+
+.btn-red{
+    background:linear-gradient(45deg,#dc2626,#b91c1c);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    overflow:hidden;
+    border-radius:12px;
+}
+
+table th{
+    background:#2563eb;
+    color:white;
+    padding:14px;
+    font-size:14px;
+    text-align:left;
+}
+
+table td{
+    padding:14px;
+    border-bottom:1px solid #e2e8f0;
+    font-size:13px;
+}
+
+table tr:hover{
+    background:#f8fafc;
+}
+
+.student-photo-small{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #2563eb;
+}
+
+.search-box{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+}
+
+.student-link{
+    text-decoration:none;
+    color:#1d4ed8;
+    font-weight:600;
+}
+
+.student-link:hover{
+    color:#7c3aed;
+}
+
+</style>
+
+<div class="card">
+
+    <h1 class="section-title">Student Management</h1>
+
+    <p style="color:#64748b; margin-bottom:16px;">
+        Manage, search, update, and remove student records.
+    </p>
+
+    <form method="GET" class="search-box">
+
+        <input type="text"
+       id="studentSearch"
+       placeholder="Search by Name or Student ID">
+
+        <button type="submit" class="btn">
+            Search
+        </button>
+
+        {% if not request.user.groups.all.0.name == 'Student' %}
+
+<a href="/add-student/" class="btn btn-green">
+    Add Student
+</a>
+
+{% endif %}
+
+    </form>
+
+</div>
+
+<div class="card">
+
+    <table id="studentTable">
+
+        <tr>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Student ID</th>
+            <th>Email</th>
+            <th>Course</th>
+            <th>Phone</th>
+            <th>Action</th>
+        </tr>
+
+        {% for student in students %}
+
+        <tr>
+
+            <td>
+
+                {% if student.photo %}
+                    <img src="{{ student.photo.url }}"
+                         alt="Photo"
+                         class="student-photo-small">
+
+                {% else %}
+                    <div class="student-photo-small"
+                         style="background:#cbd5e1;">
+                    </div>
+                {% endif %}
+
+            </td>
+
+            <td>
+                <a href="/student/{{ student.id }}/"
+                   class="student-link">
+
+                    {{ student.name }}
+
+                </a>
+            </td>
+
+            <!-- 🔥 FIXED STUDENT ID -->
+            <td>
+                {{ student.student_id }}
+            </td>
+
+            <td>
+                {{ student.email }}
+            </td>
+
+            <td>
+                {{ student.course }}
+            </td>
+
+            <td>
+                {{ student.phone }}
+            </td>
+
+            <td>
+              
+                <td>
+
+{% if not request.user.groups.all.0.name == 'Student' %}
+
+    <a href="/edit-student/{{ student.id }}/"
+       class="btn btn-green"
+       style="padding:8px 12px;">
+
+        Edit
+
+    </a>
+
+    <a href="/delete-student/{{ student.id }}/"
+       class="btn btn-red confirm-delete"
+       style="padding:8px 12px;">
+
+        Delete
+
+    </a>
+
+{% else %}
+
+    <span style="
+        color:#64748b;
+        font-size:13px;
+    ">
+
+        View Only
+
+    </span>
+
+{% endif %}
+
+</td>
+               
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="7">
+                No students found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    const search =
+        document.getElementById("studentSearch");
+
+    const table =
+        document.getElementById("studentTable");
+
+    const rows =
+        table.getElementsByTagName("tr");
+
+    search.addEventListener("keyup", function(){
+
+        const value =
+            search.value.toLowerCase();
+
+        for(let i = 1; i < rows.length; i++){
+
+            const rowText =
+                rows[i].innerText.toLowerCase();
+
+            if(rowText.includes(value)){
+
+                rows[i].style.display = "";
+
+            } else {
+
+                rows[i].style.display = "none";
+
+            }
+        }
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

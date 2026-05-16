@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .card {
+        max-width: 450px;
+        margin: 40px auto;
+        padding: 25px;
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+
+    input:focus {
+        border-color: #4CAF50;
+        outline: none;
+    }
+
+    .btn {
+        width: 100%;
+        margin-top: 15px;
+        padding: 10px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .btn:hover {
+        background: #45a049;
+    }
+
+    .message {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .error {
+        color: red;
+    }
+
+    .success {
+        color: green;
+    }
+
+    .hint {
+        font-size: 12px;
+        color: gray;
+        margin-top: 5px;
+    }
+
+    .login-link {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        font-size: 14px;
+    }
+</style>
+
+<div class="card">
+    <h1>Create Account</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Username</label>
+        <input type="text" name="username" required minlength="3">
+
+        <label>Email</label>
+        <input type="email" name="email" required>
+
+        <label>Password</label>
+        <div style="position:relative;">
+
+    <input type="password"
+           id="registerPassword"
+           name="password"
+           placeholder="Enter Password"
+           required>
+
+    <span onclick="toggleRegisterPassword()"
+          style="
+            position:absolute;
+            right:15px;
+            top:16px;
+            cursor:pointer;
+            font-size:18px;
+          ">
+
+        👁️
+
+    </span>
+
+</div>
+
+        <label>Confirm Password</label>
+        <div style="position:relative;">
+
+    <input type="password"
+           id="confirmPassword"
+           name="password2"
+           placeholder="Confirm Password"
+           required>
+
+    <span onclick="toggleConfirmPassword()"
+          style="
+            position:absolute;
+            right:15px;
+            top:16px;
+            cursor:pointer;
+            font-size:18px;
+          ">
+
+        👁️
+
+    </span>
+
+</div>
+
+        <!-- ROLE KEY -->
+        <label>Role Key</label>
+        <input type="password"
+       name="role_key"
+       placeholder="Enter Secret Role Key"
+       required>
+       
+
+        <button type="submit" class="btn">Register</button>
+    </form>
+
+    <!-- MESSAGES -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message 
+                {% if message.tags == 'error' %}error{% else %}success{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <a href="/login/" class="login-link">Already have an account? Login</a>
+</div>
+
+<script>
+
+function toggleRegisterPassword(){
+
+    const password =
+        document.getElementById("registerPassword");
+
+    if(password.type === "password"){
+
+        password.type = "text";
+
+    } else {
+
+        password.type = "password";
+
+    }
+}
+
+function toggleConfirmPassword(){
+
+    const password =
+        document.getElementById("confirmPassword");
+
+    if(password.type === "password"){
+
+        password.type = "text";
+
+    } else {
+
+        password.type = "password";
+
+    }
+}
+
+</script>
+
+{% endblock %}

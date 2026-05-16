@@ -1,0 +1,278 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    label{
+
+    color:#0f172a !important;
+
+    font-weight:600;
+
+    font-size:15px;
+}
+
+input{
+
+    color:#0f172a !important;
+
+    background:#f8fafc !important;
+
+    font-weight:500;
+}
+
+input::placeholder{
+
+    color:#64748b;
+}
+
+.login-wrapper{
+    min-height:80vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.login-card{
+    width:100%;
+    max-width:460px;
+    background:rgba(255,255,255,0.9);
+    backdrop-filter:blur(10px);
+    border-radius:28px;
+    padding:40px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.15);
+    animation:fadeUp 0.6s ease;
+}
+
+.login-header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.login-logo{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:auto;
+    color:white;
+    font-size:38px;
+    margin-bottom:18px;
+    box-shadow:0 12px 25px rgba(37,99,235,0.3);
+}
+
+.login-header h1{
+    font-size:32px;
+    color:#0f172a;
+    margin-bottom:10px;
+}
+
+.login-header p{
+    color:#64748b;
+    font-size:14px;
+}
+
+.input-group{
+    margin-bottom:20px;
+}
+
+.input-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:#0f172a;
+}
+
+.input-group input{
+    width:100%;
+    padding:14px;
+    border-radius:14px;
+    border:1px solid #cbd5e1;
+    font-size:15px;
+    transition:0.3s;
+}
+
+.input-group input:focus{
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 4px rgba(37,99,235,0.15);
+}
+
+.login-btn{
+    width:100%;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    border:none;
+    padding:14px;
+    border-radius:14px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.login-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 25px rgba(37,99,235,0.25);
+}
+
+.error-box{
+    margin-top:15px;
+    background:#fee2e2;
+    color:#b91c1c;
+    padding:12px;
+    border-radius:12px;
+    font-size:14px;
+}
+
+.register-link{
+    text-align:center;
+    margin-top:20px;
+}
+
+.register-link a{
+    color:#2563eb;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.register-link a:hover{
+    color:#7c3aed;
+}
+
+</style>
+
+<div class="login-wrapper">
+
+    <div class="login-card">
+
+        <!-- HEADER -->
+        <div class="login-header">
+
+            <div class="login-logo">
+                🎓
+            </div>
+
+            <h1>Welcome Back</h1>
+
+            <p>
+                Smart Student Management System
+            </p>
+
+        </div>
+
+        <!-- FORM -->
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="input-group">
+
+                <label>Username</label>
+
+                <input type="text"
+                       name="username"
+                       placeholder="Enter Username"
+                       required>
+
+            </div>
+
+            <div class="input-group">
+
+                <label>Password</label>
+
+               <div style="position:relative;">
+
+    <input type="password"
+           id="loginPassword"
+           name="password"
+           placeholder="Enter Password"
+           required>
+
+    <span onclick="toggleLoginPassword()"
+          style="
+            position:absolute;
+            right:15px;
+            top:16px;
+            cursor:pointer;
+            font-size:18px;
+          ">
+
+        👁️
+
+    </span>
+
+</div>
+
+            
+
+            <button type="submit" class="login-btn">
+
+                Login
+
+            </button>
+
+            <div style="text-align:center; margin-top:18px;">
+
+    <a href="{% url 'password_reset' %}"
+       style="
+       color:#2563eb;
+       text-decoration:none;
+       font-weight:600;
+    ">
+
+        Forgot Password?
+
+    </a>
+
+</div>
+
+        </form>
+
+        <!-- ERROR -->
+        {% if error %}
+
+            <div class="error-box">
+                {{ error }}
+            </div>
+
+        {% endif %}
+
+        <!-- REGISTER -->
+        <div class="register-link">
+
+            <a href="/register/">
+                Create New Account
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function toggleLoginPassword(){
+
+    const password =
+        document.getElementById("loginPassword");
+
+    if(password.type === "password"){
+
+        password.type = "text";
+
+    } else {
+
+        password.type = "password";
+
+    }
+}
+
+</script>
+
+{% endblock %}

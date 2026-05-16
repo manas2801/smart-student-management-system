@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.profile-wrapper{
+    max-width:900px;
+    margin:auto;
+}
+
+.profile-header{
+    background:linear-gradient(135deg,#1d4ed8,#7c3aed);
+    border-radius:25px;
+    padding:35px;
+    color:white;
+    text-align:center;
+    margin-bottom:25px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.15);
+}
+
+.profile-avatar{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:white;
+    color:#1d4ed8;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:45px;
+    font-weight:bold;
+    margin:auto;
+    margin-bottom:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.profile-header h1{
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+.profile-header p{
+    font-size:15px;
+    opacity:0.95;
+}
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.info-card{
+    background:white;
+    border-radius:20px;
+    padding:24px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    transition:0.3s;
+}
+
+.info-card:hover{
+    transform:translateY(-5px);
+}
+
+.info-title{
+    color:#64748b;
+    font-size:14px;
+    margin-bottom:8px;
+}
+
+.info-value{
+    font-size:18px;
+    font-weight:600;
+    color:#0f172a;
+}
+
+.role-badge{
+    display:inline-block;
+    margin-top:12px;
+    background:white;
+    color:#1d4ed8;
+    padding:8px 16px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.quick-stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:20px;
+    margin-top:25px;
+}
+
+.stat-box{
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:white;
+    border-radius:18px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 10px 20px rgba(37,99,235,0.2);
+}
+
+.stat-box h2{
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+.stat-box p{
+    font-size:14px;
+}
+
+@media print{
+
+    body{
+        background:white !important;
+    }
+
+    .sidebar,
+    .topbar,
+    .btn,
+    footer{
+        display:none !important;
+    }
+
+    .profile-wrapper{
+        max-width:100%;
+        margin:0;
+        padding:0;
+    }
+
+    .profile-header{
+        box-shadow:none;
+        background:#2563eb !important;
+        color:white !important;
+    }
+
+    .info-card,
+    .stat-box{
+        box-shadow:none;
+        border:1px solid #ddd;
+    }
+
+}
+
+</style>
+
+<div class="profile-wrapper">
+
+    <!-- HEADER -->
+    <div class="profile-header">
+
+        <div class="profile-avatar">
+            {{ user.username|first|upper }}
+        </div>
+
+        <h1>Welcome {{ user.username }}</h1>
+
+        <p>
+            Smart Student Management System User Profile
+        </p>
+
+        <div class="role-badge">
+            {{ role }}
+        </div>
+
+    </div>
+
+    <!-- INFO GRID -->
+    <div class="profile-grid">
+
+        <div class="info-card">
+            <p class="info-title">Username</p>
+            <p class="info-value">{{ user.username }}</p>
+        </div>
+
+        <div class="info-card">
+            <p class="info-title">Email Address</p>
+            <p class="info-value">{{ user.email }}</p>
+        </div>
+
+        <div class="info-card">
+            <p class="info-title">Account Status</p>
+            <p class="info-value">Logged In</p>
+        </div>
+
+        <div class="info-card">
+            <p class="info-title">User Role</p>
+            <p class="info-value">{{ role }}</p>
+        </div>
+
+    </div>
+
+    <div style="text-align:center; margin-top:25px;">
+
+    <button onclick="printProfile()"
+            class="btn"
+            style="
+                padding:12px 24px;
+                font-size:15px;
+            ">
+
+        🖨️ Print Profile
+
+    </button>
+
+</div>
+
+    <!-- QUICK STATS -->
+    <div class="quick-stats">
+
+        <div class="stat-box">
+            <h2>24/7</h2>
+            <p>Portal Access</p>
+        </div>
+
+        <div class="stat-box">
+            <h2>100%</h2>
+            <p>Secure Login</p>
+        </div>
+
+        <div class="stat-box">
+            <h2>AI</h2>
+            <p>Chatbot Enabled</p>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function printProfile(){
+
+    window.print();
+
+}
+
+</script>
+
+{% endblock %}

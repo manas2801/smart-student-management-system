@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.chatbot-wrapper{
+    max-width:900px;
+    margin:auto;
+}
+
+.chat-header{
+    background:linear-gradient(135deg,#1d4ed8,#7c3aed);
+    color:white;
+    border-radius:24px;
+    padding:35px;
+    text-align:center;
+    margin-bottom:25px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.15);
+}
+
+.chat-header h1{
+    font-size:34px;
+    margin-bottom:12px;
+}
+
+.chat-header p{
+    font-size:15px;
+    opacity:0.95;
+    line-height:1.7;
+}
+
+.bot-avatar{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:white;
+    color:#1d4ed8;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:40px;
+    margin:auto;
+    margin-bottom:18px;
+    box-shadow:0 12px 25px rgba(0,0,0,0.2);
+}
+
+.chat-form{
+    background:white;
+    border-radius:22px;
+    padding:28px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    margin-bottom:25px;
+}
+
+.chat-form input{
+    width:100%;
+    padding:15px;
+    border-radius:14px;
+    border:1px solid #cbd5e1;
+    margin-top:10px;
+    margin-bottom:20px;
+    font-size:15px;
+}
+
+.chat-form input:focus{
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 4px rgba(37,99,235,0.15);
+}
+
+.reply-card{
+    background:linear-gradient(135deg,#eff6ff,#eef2ff);
+    border-left:5px solid #2563eb;
+    border-radius:20px;
+    padding:24px;
+    margin-top:25px;
+    box-shadow:0 10px 20px rgba(0,0,0,0.06);
+}
+
+.reply-title{
+    color:#1d4ed8;
+    margin-bottom:12px;
+    font-size:20px;
+}
+
+.reply-text{
+    line-height:1.8;
+    color:#334155;
+}
+
+.example-card{
+    background:white;
+    border-radius:22px;
+    padding:28px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+.example-list{
+    list-style:none;
+    padding:0;
+}
+
+.example-list li{
+    background:#f8fafc;
+    padding:14px;
+    border-radius:12px;
+    margin-bottom:12px;
+    transition:0.3s;
+    border-left:4px solid #2563eb;
+}
+
+.example-list li:hover{
+    transform:translateX(5px);
+    background:#eff6ff;
+}
+
+</style>
+
+<div class="chatbot-wrapper">
+
+    <!-- HEADER -->
+    <div class="chat-header">
+
+        <div class="bot-avatar">
+            🤖
+        </div>
+
+        <h1>SmartSMS AI Chatbot</h1>
+
+        <p>
+            Ask anything about students, attendance, marks,
+            assignments, reports, fees, notices, login,
+            or project features.
+        </p>
+
+    </div>
+
+    <!-- CHAT FORM -->
+    <div class="chat-form">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <label style="font-weight:600;">
+                Ask Your Question
+            </label>
+
+            <input type="text"
+                   name="message"
+                   placeholder="Example: How to add student?"
+                   required>
+
+            <button type="submit" class="btn">
+
+                Ask Chatbot
+
+            </button>
+
+        </form>
+
+        <!-- BOT REPLY -->
+        {% if response %}
+
+        <div class="reply-card">
+
+            <h3 class="reply-title">
+                🤖 Chatbot Reply
+            </h3>
+
+           <p class="reply-text" id="typingText"></p>
+
+<div id="hiddenResponse" style="display:none;">
+    {{ response }}
+</div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <!-- EXAMPLE QUESTIONS -->
+    <div class="example-card">
+
+        <h2 class="section-title">
+            Example Questions
+        </h2>
+
+        <ul class="example-list">
+
+            <li>
+                How to add student?
+            </li>
+
+            <li>
+                What is attendance module?
+            </li>
+
+            <li>
+                What is fee module?
+            </li>
+
+            <li>
+                How to download report?
+            </li>
+
+            <li>
+                What is this project?
+            </li>
+
+            <li>
+                How does login work?
+            </li>
+
+            <li>
+                How does role-based access work?
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    const hidden =
+        document.getElementById("hiddenResponse");
+
+    const typing =
+        document.getElementById("typingText");
+
+    if(hidden && typing){
+
+        const text =
+            hidden.innerText;
+
+        let index = 0;
+
+        function typeEffect(){
+
+            if(index < text.length){
+
+                typing.innerHTML +=
+                    text.charAt(index);
+
+                index++;
+
+                setTimeout(typeEffect, 25);
+
+            }
+
+        }
+
+        typeEffect();
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

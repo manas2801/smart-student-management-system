@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card">
+
+    <h1 class="section-title">
+        Notices & Notifications
+    </h1>
+
+    <p style="
+        color:#64748b;
+        margin-bottom:20px;
+    ">
+
+        View and manage important
+        academic announcements.
+
+    </p>
+
+    {% if not request.user.groups.all.0.name == 'Student' %}
+
+    <!-- ADMIN / TEACHER FORM -->
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <label>Title</label>
+
+        <input type="text"
+               name="title"
+               placeholder="Enter Notice Title"
+               required>
+
+        <label>Message</label>
+
+        <textarea name="message"
+                  rows="4"
+                  placeholder="Enter Notice Message"
+                  required></textarea>
+
+        <br><br>
+
+        <button type="submit"
+                class="btn">
+
+            Add Notice
+
+        </button>
+
+    </form>
+
+    {% else %}
+
+    <!-- STUDENT VIEW -->
+
+    <div style="
+        margin-top:20px;
+        padding:20px;
+        border-radius:16px;
+        background:rgba(37,99,235,0.06);
+        border-left:4px solid #2563eb;
+    ">
+
+        <h3 style="
+            color:#2563eb;
+            margin-bottom:10px;
+        ">
+
+            Student Access
+
+        </h3>
+
+        <p style="
+            color:#475569;
+            line-height:1.8;
+        ">
+
+            You can only view notices
+            published by teachers or admin.
+
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<!-- NOTICE TABLE -->
+
+<div class="card">
+
+    <h2 class="section-title">
+        Published Notices
+    </h2>
+
+    <table>
+
+        <tr>
+
+            <th>Title</th>
+
+            <th>Message</th>
+
+            <th>Created</th>
+
+            <th>Action</th>
+
+        </tr>
+
+        {% for notice in notices %}
+
+        <tr>
+
+            <td>
+                {{ notice.title }}
+            </td>
+
+            <td>
+                {{ notice.message }}
+            </td>
+
+            <td>
+                {{ notice.created_at }}
+            </td>
+
+            <td>
+
+            {% if not request.user.groups.all.0.name == 'Student' %}
+
+                <a href="/delete-notice/{{ notice.id }}/"
+                   class="btn btn-red confirm-delete"
+                   style="padding:8px 12px;">
+
+                    Delete
+
+                </a>
+
+            {% else %}
+
+                <span style="
+                    color:#64748b;
+                    font-size:13px;
+                ">
+
+                    View Only
+
+                </span>
+
+            {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="4">
+
+                No notices have been published yet.
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}

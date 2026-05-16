@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card" style="max-width:760px; margin:auto;">
+    <h1 class="section-title">Contact Us</h1>
+    <p style="color:#64748b; margin-bottom:18px;">
+        Send your message or feedback through the form below.
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Name</label>
+        <input type="text" name="name" required>
+
+        <label>Email</label>
+        <input type="email" name="email" required>
+
+        <label>Message</label>
+        <textarea name="message" rows="5" required></textarea>
+
+        <button type="submit" class="btn">Send Message</button>
+    </form>
+
+    <p style="color:green; margin-top:12px;">{{ message }}</p>
+</div>
+{% endblock %}

@@ -1,0 +1,329 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+.team-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(280px,1fr));
+
+    gap:28px;
+}
+
+.team-card{
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(15,23,42,0.95),
+        rgba(30,41,59,0.85)
+    );
+
+    border-radius:24px;
+
+    padding:35px 25px;
+
+    text-align:center;
+
+    border:
+    1px solid rgba(255,255,255,0.06);
+
+    transition:0.35s ease;
+
+    box-shadow:
+    0 10px 35px rgba(0,0,0,0.28);
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.team-card:hover{
+
+    transform:
+    translateY(-8px);
+
+    box-shadow:
+    0 20px 45px rgba(37,99,235,0.22);
+
+    border-color:rgba(124,58,237,0.4);
+}
+
+.team-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:5px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #2563eb,
+        #7c3aed
+    );
+}
+
+.team-img-box{
+
+    width:120px;
+    height:120px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    padding:4px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    );
+
+    box-shadow:
+    0 8px 25px rgba(37,99,235,0.25);
+}
+
+.team-photo{
+
+    width:100%;
+    height:100%;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    background:white;
+}
+
+.manas-photo{
+
+    object-position:center 20%;
+}
+
+.dev-photo{
+
+    object-position:center top;
+}
+
+.team-card h3{
+
+    margin-top:20px;
+
+    color:white;
+
+    font: size 22px;
+}
+
+.team-role{
+
+    display:inline-block;
+
+    margin-top:10px;
+
+    color:#93c5fd;
+
+    font-size:14px;
+
+    font-weight:600;
+}
+
+.team-card p{
+
+    padding:0 10px;
+
+    margin-top:18px;
+
+    color:#cbd5e1;
+
+    line-height:1.7;
+
+    font-size:14px;
+}
+
+</style>
+
+<div class="hero">
+    <h1>Smart Student Management System</h1>
+    <p>
+        A full premium Django-based college project to manage students, attendance,
+        marks, fees, timetable, assignments, notices, and downloadable reports
+        from one unified platform.
+    </p>
+    <br><br>
+    <a href="/register/" class="btn">Get Started</a>
+    <a href="/login/" class="btn btn-green">Login</a>
+</div>
+
+<div class="card">
+    <h2 class="section-title">Why This Project?</h2>
+    <p style="line-height:1.9; color:#475569;">
+        This project is designed to digitize student management in colleges and institutes.
+        Instead of maintaining records manually, the system provides a centralized web-based
+        platform where users can manage student details, attendance, marks, assignments,
+        fees, notices, timetable, and reports efficiently.
+    </p>
+</div>
+
+<h2 class="section-title">Main Features</h2>
+
+<div class="feature-grid">
+    <div class="feature-box">
+        <h3>Student Records</h3>
+        <p>Add, edit, search, and manage complete student profiles with photos.</p>
+    </div>
+    <div class="feature-box">
+        <h3>Attendance Tracking</h3>
+        <p>Record present and absent status with a clean academic workflow.</p>
+    </div>
+    <div class="feature-box">
+        <h3>Marks Management</h3>
+        <p>Store subject-wise performance data for each student clearly.</p>
+    </div>
+    <div class="feature-box">
+        <h3>Fee Management</h3>
+        <p>Track total, paid, and due fee records student-wise.</p>
+    </div>
+    <div class="feature-box">
+        <h3>Timetable Module</h3>
+        <p>Manage classes using day, time, subject, and room details.</p>
+    </div>
+    <div class="feature-box">
+        <h3>Reports & Analytics</h3>
+        <p>Use dashboard charts and export student reports in CSV format.</p>
+    </div>
+</div>
+
+<div class="card">
+    <h2 class="section-title">Latest Notices</h2>
+
+    {% for notice in notices %}
+        <div style="margin-bottom:14px;">
+            <p><strong>{{ notice.title }}</strong></p>
+            <p style="color:#475569;">{{ notice.message }}</p>
+        </div>
+        <hr style="margin:12px 0;">
+    {% empty %}
+        <p style="color:#64748b;">No notices available right now.</p>
+    {% endfor %}
+</div>
+
+<div class="card">
+
+    <h2 class="section-title"
+        style="
+        text-align:center;
+        margin-bottom:35px;
+        font-size:42px;
+    ">
+
+         Development Team
+
+    </h2>
+
+    <div class="team-grid">
+
+        <!-- MANAS -->
+
+        <div class="team-card">
+
+            <div class="team-img-box">
+
+                <img src="/media/team/manas.jpg"
+                     class="team-photo manas-photo">
+
+            </div>
+
+            <h3>
+                Manas Mayank
+            </h3>
+
+            <span class="team-role">
+                Backend Developer
+            </span>
+
+            <p>
+
+                Django Integration,
+                Authentication,
+                Database Management,
+                Backend Logic
+
+            </p>
+
+        </div>
+
+        <!-- AKMAL -->
+
+        <div class="team-card">
+
+            <div class="team-img-box">
+
+                <img src="/media/team/akmal.jpg"
+                     class="team-photo">
+
+            </div>
+
+            <h3>
+                Akmal Aflaque
+            </h3>
+
+            <span class="team-role">
+                Frontend Developer
+            </span>
+
+            <p>
+
+                UI Design,
+                Styling,
+                Responsive Layout,
+                User Experience
+
+            </p>
+
+        </div>
+
+        <!-- DEVASHISH -->
+
+        <div class="team-card">
+
+            <div class="team-img-box">
+
+                <img src="/media/team/devashish.jpg"
+                     class="team-photo dev-photo">
+
+            </div>
+
+            <h3>
+                Devashish Raj
+            </h3>
+
+            <span class="team-role">
+                Testing & Documentation
+            </span>
+
+            <p>
+
+                Module Testing,
+                Documentation,
+                Report Preparation,
+                System Validation
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

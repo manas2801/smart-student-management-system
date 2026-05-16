@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <h1 class="section-title">Timetable Management</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Day</label>
+        <select name="day" required>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+        </select>
+
+        <label>Subject</label>
+        <input type="text" name="subject" required>
+
+        <label>Start Time</label>
+        <input type="time" name="start_time" required>
+
+        <label>End Time</label>
+        <input type="time" name="end_time" required>
+
+        <label>Room</label>
+        <input type="text" name="room" required>
+
+        <button type="submit" class="btn">Add Timetable</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2 class="section-title">Class Timetable</h2>
+
+    <table>
+        <tr>
+            <th>Day</th>
+            <th>Subject</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Room</th>
+            <th>Action</th>
+        </tr>
+
+        {% for row in records %}
+        <tr>
+            <td>{{ row.day }}</td>
+            <td>{{ row.subject }}</td>
+            <td>{{ row.start_time }}</td>
+            <td>{{ row.end_time }}</td>
+            <td>{{ row.room }}</td>
+            <td>
+                <a href="/delete-timetable/{{ row.id }}/" class="btn btn-red confirm-delete" style="padding:8px 12px;">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No timetable records found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

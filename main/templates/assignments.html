@@ -1,0 +1,429 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.page-title{
+    font-size:26px;
+    margin-bottom:10px;
+    color:#0f172a;
+}
+
+.assignment-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.assignment-card{
+    background:white;
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    transition:0.3s;
+    border-left:5px solid #2563eb;
+}
+
+.assignment-card:hover{
+    transform:translateY(-5px);
+}
+
+.assignment-title{
+    font-size:20px;
+    font-weight:700;
+    color:#1d4ed8;
+    margin-bottom:10px;
+}
+
+.assignment-desc{
+    color:#475569;
+    margin-bottom:15px;
+    line-height:1.6;
+}
+
+.assignment-date{
+    display:inline-block;
+    background:#dbeafe;
+    color:#1d4ed8;
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:12px;
+    margin-bottom:15px;
+    font-weight:600;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.upload-box{
+    border:2px dashed #93c5fd;
+    padding:20px;
+    border-radius:14px;
+    background:#f8fbff;
+}
+
+.download-btn{
+    display:inline-block;
+    margin-top:10px;
+    background:
+    linear-gradient(135deg,#16a34a,#15803d);
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:10px 16px;
+
+    border-radius:10px;
+
+    font-size:13px;
+
+    transition:0.3s;
+}
+
+.download-btn:hover{
+    transform:translateY(-2px);
+}
+
+.delete-btn{
+    display:inline-block;
+    margin-top:10px;
+    background:
+    linear-gradient(135deg,#dc2626,#b91c1c);
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:10px 16px;
+
+    border-radius:10px;
+
+    font-size:13px;
+}
+
+</style>
+
+<!-- FORM SECTION -->
+
+<div class="card" style="max-width:1000px; margin:auto;">
+
+    <h2 class="page-title">
+        Assignment Management
+    </h2>
+
+    <p style="
+        color:#64748b;
+        margin-bottom:20px;
+    ">
+
+        Create, upload, manage,
+        and download academic assignments.
+
+    </p>
+
+    <!-- MESSAGES -->
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <p style="
+                background:#dcfce7;
+                color:#166534;
+                padding:10px;
+                border-radius:10px;
+                margin-bottom:15px;
+            ">
+
+                {{ message }}
+
+            </p>
+
+        {% endfor %}
+
+    {% endif %}
+
+    <!-- FORM -->
+
+    <form method="POST"
+      enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    {% if request.user.groups.all.0.name == 'Student' %}
+
+    <!-- STUDENT SUBMISSION FORM -->
+
+    <div class="upload-box">
+
+        <label>
+            Select Assignment
+        </label>
+
+        <select name="assignment_id" required>
+
+            <option value="">
+                Select Assignment
+            </option>
+
+            {% for assignment in assignments %}
+
+            <option value="{{ assignment.id }}">
+
+                {{ assignment.title }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+    <div class="upload-box"
+         style="margin-top:20px;">
+
+        <label>
+            Upload Submission File
+        </label>
+
+        <input type="file"
+               name="submission_file"
+               required>
+
+    </div>
+
+    <button type="submit"
+            class="btn"
+            style="margin-top:20px;">
+
+        Submit Assignment
+
+    </button>
+
+    {% else %}
+
+    <!-- TEACHER / ADMIN FORM -->
+
+    <div class="form-grid">
+
+        <div>
+
+            <label>Assignment Title</label>
+
+            <input type="text"
+                   name="title"
+                   placeholder="Enter Assignment Title"
+                   required>
+
+        </div>
+
+        <div>
+
+            <label>Due Date</label>
+
+            <input type="date"
+                   name="due_date"
+                   required>
+
+        </div>
+
+    </div>
+
+    <label>Description</label>
+
+    <textarea name="description"
+              rows="4"
+              placeholder="Enter Assignment Description"
+              required></textarea>
+
+    <div class="upload-box">
+
+        <label>
+            Upload Assignment File
+        </label>
+
+        <input type="file"
+               name="file">
+
+    </div>
+
+    <button type="submit"
+            class="btn"
+            style="margin-top:20px;">
+
+        Add Assignment
+
+    </button>
+
+    {% endif %}
+
+</form>
+
+</div>
+
+<!-- ASSIGNMENT LIST -->
+
+<div class="card" style="margin-top:25px;">
+
+    <h2 class="page-title">
+        All Assignments
+    </h2>
+
+    <div class="assignment-grid">
+
+        {% for assignment in assignments %}
+
+        <div class="assignment-card">
+
+            <div class="assignment-title">
+
+                {{ assignment.title }}
+
+            </div>
+
+            <div class="assignment-date">
+
+                Due: {{ assignment.due_date }}
+
+            </div>
+
+            <div class="assignment-desc">
+
+                {{ assignment.description }}
+
+            </div>
+
+            {% if assignment.file %}
+
+                <a href="{{ assignment.file.url }}"
+                   target="_blank"
+                   class="download-btn">
+
+                    📥 Download File
+
+                </a>
+
+            {% endif %}
+
+            <br>
+
+            {% if not request.user.groups.all.0.name == 'Student' %}
+
+            <a href="/delete-assignment/{{ assignment.id }}/"
+               class="delete-btn confirm-delete">
+
+                Delete Assignment
+
+            </a>
+
+            {% else %}
+
+            <span style="
+                color:#64748b;
+                font-size:13px;
+            ">
+
+                Student Access
+
+            </span>
+
+            {% endif %}
+
+        </div>
+
+        {% empty %}
+
+        <p>No assignments added yet.</p>
+
+        {% endfor %}
+
+    </div>
+
+    {% if not request.user.groups.all.0.name == 'Student' %}
+
+<div class="card" style="margin-top:25px;">
+
+    <h2 class="page-title">
+        Student Submissions
+    </h2>
+
+    <table>
+
+        <tr>
+
+            <th>Student</th>
+
+            <th>Assignment</th>
+
+            <th>Submitted File</th>
+
+            <th>Submitted At</th>
+
+        </tr>
+
+        {% for submission in all_submissions %}
+
+        <tr>
+
+            <td>
+
+                {{ submission.student.username }}
+
+            </td>
+
+            <td>
+
+                {{ submission.assignment.title }}
+
+            </td>
+
+            <td>
+
+                <a href="{{ submission.file.url }}"
+                   target="_blank">
+
+                    Download Submission
+
+                </a>
+
+            </td>
+
+            <td>
+
+                {{ submission.submitted_at }}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="4">
+
+                No submissions yet.
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endif %}
+
+</div>
+
+{% endblock %}

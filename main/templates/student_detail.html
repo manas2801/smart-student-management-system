@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <h1 class="section-title">Student Details</h1>
+
+    <div style="display:flex; gap:28px; align-items:flex-start; flex-wrap:wrap;">
+        <div>
+            {% if student.photo %}
+                <img src="{{ student.photo.url }}" alt="Student Photo" class="student-photo">
+            {% else %}
+                <div class="student-photo" style="background:#cbd5e1;"></div>
+            {% endif %}
+        </div>
+
+        <!-- PERFORMANCE ANALYTICS -->
+
+<div class="card">
+
+    <h2 class="section-title">
+        Performance Analytics
+    </h2>
+
+    <div class="grid-4">
+
+        <!-- ATTENDANCE -->
+
+        <div class="stat-box stat2">
+
+            <p>Attendance</p>
+
+            <h2>
+                {{ attendance_count }}/{{ total_attendance }}
+            </h2>
+
+        </div>
+
+        <!-- AVERAGE MARKS -->
+
+        <div class="stat-box stat3">
+
+            <p>Average Marks</p>
+
+            <h2>
+                {{ average_marks }}
+            </h2>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SUBJECT MARKS -->
+
+<div class="card">
+
+    <h2 class="section-title">
+        Subject Performance
+    </h2>
+
+    <table>
+
+        <tr>
+
+            <th>Subject</th>
+
+            <th>Marks</th>
+
+        </tr>
+
+        {% for mark in marks %}
+
+        <tr>
+
+            <td>{{ mark.subject }}</td>
+
+            <td>{{ mark.marks }}</td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="2">
+
+                No marks available.
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+        <div style="flex:1; min-width:260px;">
+            <p><strong>Name:</strong> {{ student.name }}</p>
+            <br>
+            <p><strong>Student ID:</strong> {{ student.student_id }}</p>
+            <br>
+            <p><strong>Email:</strong> {{ student.email }}</p>
+            <br>
+            <p><strong>Course:</strong> {{ student.course }}</p>
+            <br>
+            <p><strong>Phone:</strong> {{ student.phone }}</p>
+            <br>
+            <p><strong>Address:</strong> {{ student.address }}</p>
+            <br>
+            <p><strong>Created At:</strong> {{ student.created_at }}</p>
+            <br><br>
+
+            <a href="/edit-student/{{ student.id }}/" class="btn btn-green">Edit Student</a>
+            <a href="/students/" class="btn">Back to Students</a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 class="section-title">Attendance History</h2>
+    <div class="card" style="margin-bottom:20px;">
+    
+    <h2>Attendance Summary</h2>
+
+    <p>
+        Attendance Percentage:
+        <strong>{{ attendance_percentage }}%</strong>
+    </p>
+
+</div>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+        {% for record in attendance_records %}
+        <tr>
+            <td>{{ record.date }}</td>
+            <td>{{ record.status }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="2">No attendance records found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="card">
+    <h2 class="section-title">Marks History</h2>
+    <table>
+        <tr>
+            <th>Subject</th>
+            <th>Marks</th>
+        </tr>
+        {% for record in marks_records %}
+        <tr>
+            <td>{{ record.subject }}</td>
+            <td>{{ record.marks }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="2">No marks records found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="card">
+    <h2 class="section-title">Fee History</h2>
+    <table>
+        <tr>
+            <th>Total Fee</th>
+            <th>Paid Fee</th>
+            <th>Due Fee</th>
+        </tr>
+        {% for fee in fee_records %}
+        <tr>
+            <td>{{ fee.total_fee }}</td>
+            <td>{{ fee.paid_fee }}</td>
+            <td>{{ fee.due_fee }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No fee records found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

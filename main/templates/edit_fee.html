@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card" style="max-width:700px; margin:auto;">
+    <h1 class="section-title">Edit Fee Record</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Total Fee</label>
+        <input type="number" name="total_fee" value="{{ fee.total_fee }}" required>
+
+        <label>Paid Fee</label>
+        <input type="number" name="paid_fee" value="{{ fee.paid_fee }}" required>
+
+        <button type="submit" class="btn">Update Fee</button>
+    </form>
+</div>
+{% endblock %}

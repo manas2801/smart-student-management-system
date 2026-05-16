@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card"
+     style="
+     max-width:750px;
+     margin:auto;
+     ">
+
+    <h1 style="
+        font-size:28px;
+        margin-bottom:10px;
+        text-align:center;
+    ">
+        Fee Payment
+    </h1>
+
+    <p style="
+        text-align:center;
+        color:#64748b;
+        margin-bottom:30px;
+    ">
+        Pay college fees securely using QR payment.
+    </p>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <label>Enter Amount</label>
+
+        <input type="number"
+               name="amount"
+               placeholder="Enter Fee Amount"
+               required>
+
+        <button type="submit"
+                class="btn"
+                style="
+                width:100%;
+                margin-top:12px;
+                ">
+
+            Generate Fee QR
+
+        </button>
+
+    </form>
+
+    {% if payment_data %}
+
+    <div style="
+        margin-top:35px;
+        text-align:center;
+    ">
+
+        <h2>
+            Scan & Pay
+        </h2>
+
+        <img src="{{ payment_data.qr_code.url }}"
+             style="
+             width:300px;
+             margin-top:20px;
+             border-radius:20px;
+             ">
+
+        <p style="
+            margin-top:15px;
+            font-size:20px;
+            font-weight:700;
+        ">
+
+            ₹ {{ payment_data.amount }}
+
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<div class="card"
+     style="
+     margin-top:30px;
+     ">
+
+    <h2 style="
+        margin-bottom:20px;
+    ">
+        Fee Payment History
+    </h2>
+
+    <table>
+
+        <tr>
+
+            <th>Student</th>
+
+            <th>Amount</th>
+
+            <th>Status</th>
+
+            <th>Date</th>
+
+        </tr>
+
+        {% for p in fee_payments %}
+
+        <tr>
+
+            <td>{{ p.student.name }}</td>
+
+            <td>₹ {{ p.amount }}</td>
+
+            <td>
+
+                {% if p.status == "Completed" %}
+
+                    <span style="
+                    color:#22c55e;
+                    font-weight:700;
+                    ">
+                        Completed
+                    </span>
+
+                {% elif p.status == "Failed" %}
+
+                    <span style="
+                    color:#ef4444;
+                    font-weight:700;
+                    ">
+                        Failed
+                    </span>
+
+                {% else %}
+
+                    <span style="
+                    color:#facc15;
+                    font-weight:700;
+                    ">
+                        Pending
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+            <td>{{ p.created_at }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}

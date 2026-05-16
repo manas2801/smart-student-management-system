@@ -1,0 +1,397 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.page-title{
+    font-size:24px;
+    margin-bottom:18px;
+    color:#0f172a;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.subject-badge{
+    padding:6px 14px;
+    border-radius:20px;
+    color:white;
+    font-size:12px;
+    font-weight:600;
+}
+
+.python{
+    background:#2563eb;
+}
+
+.dbms{
+    background:#7c3aed;
+}
+
+.java{
+    background:#ea580c;
+}
+
+.other{
+    background:#059669;
+}
+
+.marks-good{
+    color:#16a34a;
+    font-weight:700;
+}
+
+.marks-average{
+    color:#ea580c;
+    font-weight:700;
+}
+
+.marks-low{
+    color:#dc2626;
+    font-weight:700;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    overflow:hidden;
+    border-radius:14px;
+}
+
+table th{
+    background:
+    linear-gradient(135deg,#2563eb,#1d4ed8);
+
+    color:white;
+
+    padding:14px;
+
+    text-align:left;
+}
+
+table td{
+    padding:14px;
+    background:white;
+    border-bottom:1px solid #e2e8f0;
+}
+
+table tr:hover td{
+    background:#f8fafc;
+}
+
+</style>
+
+<!-- FORM CARD -->
+
+<div class="card">
+
+    <h1 class="page-title">
+        Marks Management
+    </h1>
+
+    {% if not request.user.groups.all.0.name == 'Student' %}
+
+    <!-- ADMIN / TEACHER FORM -->
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="form-grid">
+
+            <div>
+
+                <label>Select Student</label>
+
+                <select name="student" required>
+
+                    {% for student in students %}
+
+                    <option value="{{ student.id }}">
+
+                        {{ student.name }}
+                        ({{ student.student_id }})
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div>
+
+                <label>Subject</label>
+
+                <input type="text"
+                       name="subject"
+                       placeholder="Enter Subject"
+                       required>
+
+            </div>
+
+            <div>
+
+                <label>Marks</label>
+
+                <input type="number"
+                       name="marks"
+                       placeholder="Enter Marks"
+                       required>
+
+            </div>
+
+        </div>
+
+        <button type="submit"
+                class="btn"
+                style="margin-top:15px;">
+
+            Add Marks
+
+        </button>
+
+    </form>
+
+    {% else %}
+
+    <!-- STUDENT RESTRICTION -->
+
+    <div style="
+        margin-top:20px;
+        padding:20px;
+        border-radius:16px;
+        background:rgba(239,68,68,0.08);
+        border-left:4px solid #ef4444;
+    ">
+
+        <h3 style="
+            color:#ef4444;
+            margin-bottom:10px;
+        ">
+
+            Restricted Access
+
+        </h3>
+
+        <p style="
+            color:#cbd5e1;
+            line-height:1.8;
+        ">
+
+            You do not have permission
+            to modify marks records.
+
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<!-- SEARCH -->
+
+<div class="card">
+
+    <h2 class="section-title">
+        Search Marks
+    </h2>
+
+    <input type="text"
+           id="marksSearch"
+           placeholder="Search by Student or Subject"
+           style="
+                width:100%;
+                padding:14px;
+                border-radius:14px;
+                border:1px solid #cbd5e1;
+           ">
+
+</div>
+
+<!-- TABLE CARD -->
+
+<div class="card">
+
+    <h2 class="page-title">
+        Marks Records
+    </h2>
+
+    <table id="marksTable">
+
+        <tr>
+
+            <th>Student</th>
+
+            <th>Student ID</th>
+
+            <th>Subject</th>
+
+            <th>Marks</th>
+
+            <th>Action</th>
+
+        </tr>
+
+        {% for record in records %}
+
+        <tr>
+
+            <td>
+                {{ record.student.name }}
+            </td>
+
+            <td>
+                {{ record.student.student_id }}
+            </td>
+
+            <td>
+
+                {% if record.subject|lower == "python" %}
+
+                    <span class="subject-badge python">
+                        Python
+                    </span>
+
+                {% elif record.subject|lower == "dbms" %}
+
+                    <span class="subject-badge dbms">
+                        DBMS
+                    </span>
+
+                {% elif record.subject|lower == "java" %}
+
+                    <span class="subject-badge java">
+                        Java
+                    </span>
+
+                {% else %}
+
+                    <span class="subject-badge other">
+                        {{ record.subject }}
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                {% if record.marks >= 80 %}
+
+                    <span class="marks-good">
+                        {{ record.marks }}
+                    </span>
+
+                {% elif record.marks >= 50 %}
+
+                    <span class="marks-average">
+                        {{ record.marks }}
+                    </span>
+
+                {% else %}
+
+                    <span class="marks-low">
+                        {{ record.marks }}
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+            {% if not request.user.groups.all.0.name == 'Student' %}
+
+                <a href="/delete-mark/{{ record.id }}/"
+                   class="btn btn-red confirm-delete"
+                   style="padding:8px 12px;">
+
+                    Delete
+
+                </a>
+
+            {% else %}
+
+                <span style="
+                    color:#64748b;
+                    font-size:13px;
+                ">
+
+                    View Only
+
+                </span>
+
+            {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="5">
+
+                No marks records available.
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    const search =
+        document.getElementById("marksSearch");
+
+    const table =
+        document.getElementById("marksTable");
+
+    const rows =
+        table.getElementsByTagName("tr");
+
+    search.addEventListener("keyup", function(){
+
+        const value =
+            search.value.toLowerCase();
+
+        for(let i = 1; i < rows.length; i++){
+
+            const rowText =
+                rows[i].innerText.toLowerCase();
+
+            if(rowText.includes(value)){
+
+                rows[i].style.display = "";
+
+            } else {
+
+                rows[i].style.display = "none";
+
+            }
+
+        }
+
+    });
+
+});
+
+</script>
+
+{% endblock %}
