@@ -451,6 +451,7 @@ def add_student(request):
         # CREATE STUDENT RECORD
 
         Student.objects.create(
+            user=user,
             name=name,
             email=email,
             course=course,
