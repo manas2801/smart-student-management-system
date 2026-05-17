@@ -405,67 +405,69 @@ def student_detail(request, id):
 def add_student(request):
 
     if is_student(request.user):
-
         return HttpResponseForbidden(
             "Students cannot add students."
         )
 
     if request.method == "POST":
 
-        # STUDENT DETAILS
+        try:
 
-        name = request.POST.get('name')
+            name = request.POST.get('name')
+            email = request.POST.get('email')
+            course = request.POST.get('course')
+            phone = request.POST.get('phone')
+            address = request.POST.get('address')
+            photo = request.FILES.get('photo')
 
-        email = request.POST.get('email')
+            username = request.POST.get('username')
+            password = request.POST.get('password')
 
-        course = request.POST.get('course')
+            # CHECK EXISTING USERNAME
+            if User.objects.filter(username=username).exists():
 
-        phone = request.POST.get('phone')
+                messages.error(
+                    request,
+                    "Username already exists"
+                )
 
-        address = request.POST.get('address')
+                return redirect('/add-student/')
 
-        photo = request.FILES.get('photo')
+            # CREATE LOGIN USER
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password
+            )
 
-        # LOGIN DETAILS
+            # STUDENT GROUP
+            student_group, created = Group.objects.get_or_create(
+                name='Student'
+            )
 
-        username = request.POST.get('username')
+            user.groups.add(student_group)
 
-        password = request.POST.get('password')
+            # CREATE STUDENT
+            Student.objects.create(
+                user=user,
+                name=name,
+                email=email,
+                course=course,
+                phone=phone,
+                address=address,
+                photo=photo
+            )
 
-        # CREATE USER ACCOUNT
+            messages.success(
+                request,
+                "Student Added Successfully"
+            )
 
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password
-        )
+            return redirect('/students/')
 
-        # ADD TO STUDENT GROUP
+        except Exception as e:
 
-        student_group, created = Group.objects.get_or_create(
-            name='Student'
-        )
-
-        user.groups.add(student_group)
-
-        # CREATE STUDENT RECORD
-
-        Student.objects.create(
-            user=user,
-            name=name,
-            email=email,
-            course=course,
-            phone=phone,
-            address=address,
-            photo=photo
-        )
-
-        messages.success(
-            request,
-            "Student Added Successfully"
-        )
-
-        return redirect('/students/')
+            return HttpResponse(f"ERROR: {e}")
 
     return render(request, 'add_student.html')
 
