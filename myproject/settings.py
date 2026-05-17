@@ -113,6 +113,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # EMAIL
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'denobnygo',
     'API_KEY': '517465597886842',
@@ -121,4 +123,3 @@ CLOUDINARY_STORAGE = {
 
 MEDIAFILES_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
