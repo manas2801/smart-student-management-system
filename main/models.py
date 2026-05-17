@@ -76,6 +76,12 @@ class Fee(models.Model):
     paid_fee = models.IntegerField()
     due_fee = models.IntegerField()
 
+    qr_code = models.ImageField(
+    upload_to='qr_codes/',
+    blank=True,
+    null=True
+)
+
     def __str__(self):
         return self.student.name
 

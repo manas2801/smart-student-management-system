@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+
 {% block content %}
 
 <div class="card">
@@ -55,6 +58,42 @@
         </button>
 
     </form>
+
+   {% if payment_data %}
+
+<div style="
+    margin-top:40px;
+    text-align:center;
+">
+
+    <h2 style="
+        margin-bottom:18px;
+    ">
+        Scan & Pay Fees
+    </h2>
+
+    <img src="{{ payment_data.qr_code.url }}"
+         class="qr-image"
+         style="
+         width:260px;
+         padding:18px;
+         background:white;
+         border-radius:30px;
+         ">
+
+    <p style="
+        margin-top:18px;
+        font-size:18px;
+        font-weight:700;
+    ">
+
+        ₹ {{ payment_data.amount }}
+
+    </p>
+
+</div>
+
+{% endif %}
 
     {% else %}
 

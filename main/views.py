@@ -10,6 +10,12 @@ from django.core.mail import send_mail
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 
+import qrcode
+
+from io import BytesIO
+
+from django.core.files import File
+
 from .models import (
     FeePayment,
     Donation,
@@ -1238,7 +1244,7 @@ def fee_payment(request):
 
     if request.method == 'POST':
 
-        amount = request.POST.get('amount')
+        amount = request.POST.get('paid_fee')
 
         payment_data = FeePayment.objects.create(
 
