@@ -19,6 +19,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
 
     'main',
@@ -111,3 +113,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # EMAIL
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'denobnygo',
+    'API_KEY': '517465597886842',
+    'API_SECRET': '4GrMnbKrhobNaGWFBOZ9DBn49Xg',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

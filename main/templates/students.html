@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
 
 <style>
@@ -155,10 +157,19 @@ table tr:hover{
             <td>
 
                 {% if student.photo %}
-                    <img src="{{ student.photo.url }}"
-                         alt="Photo"
-                         class="student-photo-small">
+                  {% if student.photo %}
 
+    <img src="{{ student.photo.url }}"
+         alt="Photo"
+         class="student-photo-small">
+
+{% else %}
+
+    <img src="{% static 'images/default-user.png' %}"
+         alt="Photo"
+         class="student-photo-small">
+
+{% endif %}
                 {% else %}
                     <div class="student-photo-small"
                          style="background:#cbd5e1;">
