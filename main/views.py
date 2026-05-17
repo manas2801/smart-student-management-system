@@ -449,7 +449,6 @@ def add_student(request):
 
             # CREATE STUDENT
             Student.objects.create(
-                user=user,
                 name=name,
                 email=email,
                 course=course,
