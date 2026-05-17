@@ -2,7 +2,7 @@ from pathlib import Path
 import dj_database_url
 import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE DIRECTORY
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY
@@ -12,15 +12,17 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
-# APPLICATIONS
+# INSTALLED APPS
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+
     'cloudinary',
     'cloudinary_storage',
+
     'django.contrib.staticfiles',
 
     'main',
@@ -100,21 +102,14 @@ STATICFILES_DIRS = [
     BASE_DIR / "main/static",
 ]
 
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
 # MEDIA FILES
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
-
-# DEFAULT PRIMARY KEY
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# EMAIL
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
+# CLOUDINARY
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'denobnygo',
     'API_KEY': '517465597886842',
@@ -123,3 +118,8 @@ CLOUDINARY_STORAGE = {
 
 MEDIAFILES_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+# DEFAULT PRIMARY KEY
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
