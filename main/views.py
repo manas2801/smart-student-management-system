@@ -1236,23 +1236,45 @@ def update_donation_status(request, donation_id):
 @login_required
 def fee_payment(request):
 
-    fee_payments = FeePayment.objects.all().order_by('-created_at')
+    fee_records = Fee.objects.all().order_by('-id')
 
     payment_data = None
 
-    student = Student.objects.first()
-
     if request.method == 'POST':
 
-        amount = request.POST.get('paid_fee')
+        student_id = request.POST.get('student')
 
-        payment_data = FeePayment.objects.create(
+        total_fee = request.POST.get('total_fee')
+
+        paid_fee = request.POST.get('paid_fee')
+
+        student = Student.objects.get(id=student_id)
+
+        due_fee = int(total_fee) - int(paid_fee)
+
+        payment_data = Fee.objects.create(
 
             student=student,
 
-            amount=amount,
+            total_fee=total_fee,
 
-            upi_id="8709791448@pthdfc"
+            paid_fee=paid_fee,
+
+            due_fee=due_fee
+        )
+
+        upi_link = f"upi://pay?pa=8709791448@pthdfc&pn=SmartCollege&am={paid_fee}&cu=INR"
+
+        qr = qrcode.make(upi_link)
+
+        buffer = BytesIO()
+
+        qr.save(buffer, format='PNG')
+
+        payment_data.qr_code.save(
+            f'fee_{payment_data.id}.png',
+            File(buffer),
+            save=True
         )
 
         messages.success(
@@ -1264,10 +1286,11 @@ def fee_payment(request):
 
         request,
 
-        'fee_payment.html',
+        'fees.html',
 
         {
             'payment_data': payment_data,
-            'fee_payments': fee_payments
+            'fee_records': fee_records,
+            'students': Student.objects.all()
         }
     )
