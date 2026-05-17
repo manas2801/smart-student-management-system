@@ -83,7 +83,7 @@ path(
     path('delete-notice/<int:id>/', delete_notice, name='delete_notice'),
 
     # ---------- FEES ----------
-    path('fees/', fees, name='fees'),
+    path('fees/', fee_payment, name='fees'),
     path('edit-fee/<int:id>/', edit_fee, name='edit_fee'),
     path('delete-fee/<int:id>/', delete_fee, name='delete_fee'),
 
