@@ -1115,9 +1115,23 @@ transform:translateX(50%);
 
                 <div class="topbar-right">
                     <button id="themeToggle" class="btn" type="button">Dark Mode</button>
-                    {% if user.is_authenticated %}
-                        <span class="badge">Welcome, {{ user.username }}</span>
-                    {% endif %}
+                    {% if request.user.groups.all.0.name == 'Admin' %}
+
+    Welcome, Admin {{ request.user.username }}
+
+{% elif request.user.groups.all.0.name == 'Teacher' %}
+
+    Welcome, Teacher {{ request.user.username }}
+
+{% elif request.user.groups.all.0.name == 'Student' %}
+
+    Welcome, Student {{ request.user.username }}
+
+{% else %}
+
+    Welcome, {{ request.user.username }}
+
+{% endif %}
                 </div>
             </div>
 
