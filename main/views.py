@@ -886,11 +886,36 @@ def delete_fee(request, id):
 # =====================================
 # TIMETABLE
 # =====================================
-
 @login_required(login_url='/login/')
 def timetable(request):
 
-    return render(request, 'timetable.html')
+    if request.method == "POST":
+
+        day = request.POST.get('day')
+        subject = request.POST.get('subject')
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+        room = request.POST.get('room')
+
+        Timetable.objects.create(
+            day=day,
+            subject=subject,
+            start_time=start_time,
+            end_time=end_time,
+            room=room
+        )
+
+        messages.success(request, "Timetable Added Successfully")
+
+        return redirect('/timetable/')
+
+    timetables = Timetable.objects.all()
+
+    context = {
+        'timetables': timetables
+    }
+
+    return render(request, 'timetable.html', context)
 
 
 @login_required(login_url='/login/')
