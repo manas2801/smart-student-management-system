@@ -912,7 +912,7 @@ def timetable(request):
     timetables = Timetable.objects.all()
 
     context = {
-        'timetables': timetables
+        'records': timetables
     }
 
     return render(request, 'timetable.html', context)
