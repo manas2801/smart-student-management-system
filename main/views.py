@@ -917,7 +917,6 @@ def timetable(request):
 
     return render(request, 'timetable.html', context)
 
-
 @login_required(login_url='/login/')
 def delete_timetable(request, id):
 
@@ -927,7 +926,11 @@ def delete_timetable(request, id):
             "Students cannot delete timetable."
         )
 
-    messages.success(request, "Deleted")
+    timetable = get_object_or_404(Timetable, id=id)
+
+    timetable.delete()
+
+    messages.success(request, "Deleted Successfully")
 
     return redirect('/timetable/')
 
