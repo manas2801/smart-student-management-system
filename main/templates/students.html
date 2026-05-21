@@ -156,18 +156,17 @@ table tr:hover{
 
             <td>
 
-                {% if student.photo %}
-                  {% if student.photo %}
+               {% if student.photo %}
 
-    <img src="{{ student.photo.url }}"
-         alt="Photo"
-         class="student-photo-small">
+<img src="{{ student.photo.url }}"
+     alt="Photo"
+     class="student-photo-small">
 
 {% else %}
 
-    <img src="{% static 'images/default-user.png' %}"
-         alt="Photo"
-         class="student-photo-small">
+<img src="{% static 'images/default-user.png' %}"
+     alt="Photo"
+     class="student-photo-small">
 
 {% endif %}
                 {% else %}
