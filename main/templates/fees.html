@@ -97,38 +97,51 @@
 
     {% else %}
 
-    <!-- STUDENT RESTRICTION -->
+<div style="
+    margin-top:30px;
+    text-align:center;
+">
 
-    <div style="
-        margin-top:20px;
-        padding:20px;
-        border-radius:16px;
-        background:rgba(239,68,68,0.08);
-        border-left:4px solid #ef4444;
+    <h2 style="
+        margin-bottom:18px;
+    ">
+        Scan & Pay Fees
+    </h2>
+
+    {% if fee_records %}
+
+    <img src="{{ fee_records.0.qr_code.url }}"
+         class="qr-image"
+         style="
+         width:260px;
+         padding:18px;
+         background:white;
+         border-radius:30px;
+         ">
+
+    <p style="
+        margin-top:18px;
+        font-size:18px;
+        font-weight:700;
     ">
 
-        <h3 style="
-            color:#ef4444;
-            margin-bottom:10px;
-        ">
+        Total Due:
+        ₹ {{ fee_records.0.due_fee }}
 
-            Restricted Access
+    </p>
 
-        </h3>
+    {% else %}
 
-        <p style="
-            color:#cbd5e1;
-            line-height:1.8;
-        ">
-
-            You do not have permission
-            to modify fee records.
-
-        </p>
-
-    </div>
+    <p>
+        No fee payment records available.
+    </p>
 
     {% endif %}
+
+</div>
+
+{% endif %}
+
 
 </div>
 
