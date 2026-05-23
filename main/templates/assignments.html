@@ -387,14 +387,27 @@
 
             <td>
 
-                <a href="{{ submission.file.url }}"
-                   target="_blank">
+{% if submission.file %}
 
-                    Download Submission
+    <a href="{{ submission.file.url }}"
+       target="_blank"
+       class="download-btn">
 
-                </a>
+        Download Submission
 
-            </td>
+    </a>
+
+{% else %}
+
+    <span style="color:red;">
+
+        No File
+
+    </span>
+
+{% endif %}
+
+</td>
 
             <td>
 
